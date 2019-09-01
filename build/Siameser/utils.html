@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>Siameser.utils API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>Siameser.utils</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def tripler(X,y,classnames=None,triplets_dist_anch={}, triplets_dist_pos = {}, triplets_dist_neg = {}):
+    &#39;&#39;&#39;
+    Generates a list of triplets to train the Siamese Model of the following form `[anchor, positive, negative]`. The distribution of the `anchor`, `positive` and `negative` depends on the arguments passed to the function. 
+
+    # Example
+
+    ```python
+    triplets_dist_anch = {}
+    triplets_dist_pos = {
+        &#39;1&#39;:{
+            &#39;0&#39;:0.8,
+        },
+        &#39;2&#39;:{
+            &#39;0&#39;:0.1,
+            &#39;1&#39;:0.7,
+        },
+        &#39;3&#39;:{
+            &#39;0&#39;:0.05,
+            &#39;1&#39;:0.15,
+            &#39;2&#39;:0.6,
+        }
+    }
+    triplets_dist_neg = {
+        &#39;1&#39;:{
+            &#39;2&#39;:0.7,
+            &#39;3&#39;:0.2,
+        },
+        &#39;2&#39;:{
+            &#39;3&#39;:0.8,
+        },
+        &#39;3&#39;:{
+            &#39;2&#39;:0.1,
+            &#39;4&#39;:0.8
+        }
+    }
+    
+    triplets = tripler(X,y, triplets_dist_anch=triplets_dist_anch, triplets_dist_pos=triplets_dist_pos, triplets_dist_neg=triplets_dist_neg)
+
+    ```
+
+    # Arguments
+        X: numpy array with the examples names.
+        y: labels for the examples.
+        classnames: list with labels. The default is `None` the classnames is `set(y)`.
+        triplets_dist_anch: Dictionary discribes the distribution for sampling the examples of the anchor column. It should be in the following form.
+            ```python
+            triplets_dist_anch = {
+                &#39;label_1&#39;: ratio_1,
+                &#39;label_2&#39;: ratio_2,
+                ...
+                &#39;label_N&#39;: ratio_N,
+            }
+
+            ```
+        The sum of ratios must be less than or equal to 1. The dictionary doesn&#39;t have to include all labels. The examples that aren&#39;t specified in the dictionary will be sampled from with equal probabilities for each example and sum equal to `1-sum(ratios)`.
+        triplets_dist_pos: Dictionary with labels as keys and dictionary describing the distribution for positive column as values. It should be in the following form.
+            ```python
+            triplets_dist_pos = {
+                &#39;label_1&#39;: {
+                    &#39;label_1&#39;: ratio_1,
+                    &#39;label_2&#39;: ratio_2,
+                    ...
+                    &#39;label_N&#39;: ratio_N,                       
+                },
+                &#39;label_2&#39;: {
+                    &#39;label_1&#39;: ratio_1,
+                    &#39;label_2&#39;: ratio_2,
+                    ...
+                    &#39;label_N&#39;: ratio_N,
+                },
+                ...
+                &#39;label_N&#39;: {
+                    &#39;label_1&#39;: ratio_1,
+                    &#39;label_2&#39;: ratio_2,
+                    ...
+                    &#39;label_N&#39;: ratio_N,
+                }
+            }
+
+            ```
+        The sum of ratios must be less than or equal to 1. None of the dictionaries have to include all labels. The remaining `1 - ratio` will be picked randomly from `X[y==label]`.
+        triplets_dist_neg: Dictionary with labels as keys and dictionary describing the distribution for positive column as values. It should have the same form as triplets_dist_pos. The remaining `1 - ratio` will be picked randomly from `X[y!=label]`.
+
+    # Outputs:
+        X_triplet: list of length `len(X)` each element is a list `[anchor, positive, negative]`.
+
+     &#39;&#39;&#39;
+    y = y.astype(int)
+    if not classnames:
+        classnames = set(y)
+    Pr = np.zeros(y.shape)
+    rem_mask = np.array([False]*len(y))
+    for class_name in classnames:
+        if str(class_name) in triplets_dist_anch: 
+            Pr[(y==class_name)] = triplets_dist_anch[str(class_name)]/np.sum((y==class_name))
+        else:
+            rem_mask[y==class_name] = True
+    if np.sum(rem_mask) &gt; 0:
+        Pr[rem_mask] = (1-np.sum(Pr))/np.sum(rem_mask)
+    indexes_picker = np.random.choice(np.arange(len(y)), len(X), p=Pr)
+    X_anch = X[indexes_picker]
+    y_anch = y[indexes_picker]
+    anchor = np.empty(len(X), dtype=object)
+    positive = np.empty(len(X), dtype=object)
+    negative = np.empty(len(X), dtype=object)
+    index_arr = 0
+    for class_name in classnames:
+        anchor_tmp = X_anch[(y_anch==class_name)]
+        if len(anchor_tmp) == 0:
+            continue
+        anchor[index_arr:len(anchor_tmp)+index_arr] = anchor_tmp
+        index_pos = index_arr
+        if str(class_name) in triplets_dist_pos: 
+            tmp_dict = triplets_dist_pos[str(class_name)]
+            assert(sum(tmp_dict.values()) &lt;= 1)
+            for c in tmp_dict.keys():
+                ln = int(tmp_dict[c]*len(anchor_tmp))
+                class_name_2 = int(c)
+                positive[index_pos:ln+index_pos] = list(np.random.choice(X[(y==class_name_2)], ln))
+                index_pos += ln
+        remaining = len(anchor_tmp) - (index_pos - index_arr)
+        assert(remaining &gt;= 0)
+        if remaining &gt; 0:
+            positive[index_pos:remaining+index_pos] = (list(np.random.choice(X[(y==class_name)], remaining)))
+        index_neg = index_arr
+        if str(class_name) in triplets_dist_neg: 
+            tmp_dict = triplets_dist_neg[str(class_name)]
+            assert(sum(tmp_dict.values()) &lt;= 1)
+            for c in tmp_dict.keys():
+                ln = int(tmp_dict[c]*len(anchor_tmp))
+                class_name_2 = int(c)
+                negative[index_neg:ln+index_neg] = list(np.random.choice(X[(y==class_name_2)], ln))
+                index_neg += ln
+        
+        remaining = len(anchor_tmp) - (index_neg - index_arr)
+        assert(remaining &gt;= 0)
+        if remaining &gt; 0:
+            negative[index_neg:remaining+index_neg] = (list(np.random.choice(X[(y!=class_name)], remaining)))
+        index_arr += len(anchor_tmp)
+    X_triplet = np.append(anchor.reshape(1, -1), np.append(positive.reshape(1, -1), negative.reshape(1, -1), axis=0), axis=0)
+    return X_triplet
+
+def tripler_valid(X,y,classnames=None):
+    &#39;&#39;&#39;
+    Generates triplets for validation. The elements of each class are repeated the number of other classes each instance for one class. It has the following form.
+    ```python
+
+    [&#39;label_1&#39;, &#39;label_1&#39;,&#39;label_2&#39;]
+    [&#39;label_1&#39;, &#39;label_1&#39;,&#39;label_2&#39;]
+    ...
+    [&#39;label_1&#39;, &#39;label_1&#39;,&#39;label_3&#39;]
+    [&#39;label_1&#39;, &#39;label_1&#39;,&#39;label_3&#39;]
+    ...
+    [&#39;label_1&#39;, &#39;label_1&#39;,&#39;label_N&#39;]
+    [&#39;label_1&#39;, &#39;label_1&#39;,&#39;label_N&#39;]
+    [&#39;label_2&#39;, &#39;label_2&#39;,&#39;label_1&#39;]
+    [&#39;label_2&#39;, &#39;label_2&#39;,&#39;label_1&#39;]
+    ...
+    [&#39;label_2&#39;, &#39;label_2&#39;,&#39;label_3&#39;]
+    [&#39;label_2&#39;, &#39;label_2&#39;,&#39;label_3&#39;]
+    ...
+    [&#39;label_2&#39;, &#39;label_2&#39;,&#39;label_N&#39;]
+    [&#39;label_2&#39;, &#39;label_2&#39;,&#39;label_N&#39;]
+    ...
+    [&#39;label_N&#39;, &#39;label_N&#39;,&#39;label_1&#39;]
+    [&#39;label_N&#39;, &#39;label_N&#39;,&#39;label_1&#39;]
+    ...
+    [&#39;label_N&#39;, &#39;label_N&#39;,&#39;label_N-1&#39;]
+    [&#39;label_N&#39;, &#39;label_N&#39;,&#39;label_N-1&#39;]
+
+    ``` 
+
+    # Arguments
+        X: numpy array with the examples names.
+        y: labels for the examples.
+        classnames: list with labels. The default is `None` the classnames is `set(y)`.
+
+    # Outputs
+        X_triplet: list of length `2*(len(classnames)-1)*len(X)` has the distribution as describes above.
+
+    &#39;&#39;&#39;
+    if not classnames:
+        classnames = set(y)
+    anchor = np.empty(2*(len(classnames)-1)*len(X), dtype=object)
+    positive = np.empty(2*(len(classnames)-1)*len(X), dtype=object)
+    negative = np.empty(2*(len(classnames)-1)*len(X), dtype=object)
+    index_arr = 0
+    for class_1 in classnames:
+        for class_2 in classnames:
+            if class_1 == class_2:
+                continue
+            picked_Xs = X[(y == class_1) | (y == class_2)]
+            picked_Ys = y[(y == class_1) | (y == class_2)]
+            classnames_2s = set([class_1,class_2])
+            for class_name in classnames_2s:
+                anchor_tmp = picked_Xs[(picked_Ys==class_name)]
+                anchor[index_arr:len(anchor_tmp)+index_arr] = anchor_tmp
+                positive[index_arr:len(anchor_tmp)+index_arr] = (list(np.random.choice(picked_Xs[(picked_Ys==class_name)], (len(anchor_tmp)))))
+                negative[index_arr:len(anchor_tmp)+index_arr] = (list(np.random.choice(picked_Xs[(picked_Ys!=class_name)], (len(anchor_tmp)))))
+                index_arr += len(anchor_tmp)
+    X_triplet_valid = np.append(anchor.reshape(1, -1), np.append(positive.reshape(1, -1), negative.reshape(1, -1), axis=0), axis=0)
+    return X_triplet_valid
+
+def triplets_checker(X,y, triplets, pos_method=&#39;equal&#39;):
+    &#39;&#39;&#39;
+    Checks if the triplets follows is formed correctly based on `pos_method`.
+    # Example
+    ```python
+    if triplets_checker(X, y, triplets):
+        print(&#39;All examples have the positive as the same class of the anchor and the negative is not of the same class.&#39;)
+    else:
+        print(&#39;The triplets aren&#39;t correct.&#39;)
+    ```
+
+    # Arguments
+        X: numpy array with the examples names.
+        y: labels for the examples.
+        triplet: list with each element is a list of 3 elements to be cheched.
+        pos_method: if the value is `equal` the criteria for checking is `(anch==pos) and (anch!=neg)&#39;. if the value is `greater` the criteria for checking is `(anch&gt;=pos) and (anch!=neg)&#39;.
+
+    # Outputs:
+        bool value True or False.
+    &#39;&#39;&#39;
+
+
+    if pos_method==&#39;equal&#39;:
+        return all([(y[X==i] == y[X==j]) and (y[X==i] != y[X==k]) for i,j,k in triplets.T])
+    elif pos_method==&#39;greater&#39;:
+        return all([(y[X==i] &gt;= y[X==j]) and (y[X==i] != y[X==k]) for i,j,k in triplets.T])
+
+def triplets_dist_display(X,y,triplets):
+    &#39;&#39;&#39;
+    prints histogram of the anchor column and 2 matrices, one for positve column and the other for the negative. Each matrix has the rows as the histogram for each class.
+
+    # Example
+    ```python
+    triplets_dist_display(X, y, triplets):
+    ```
+
+    # Arguments
+        X: numpy array with the examples names.
+        y: labels for the examples.
+        triplet: list with each element is a list of 3 elements to be cheched.
+        pos_method: if the value is `equal` the criteria for checking is `(anch==pos) and (anch!=neg)&#39;. if the value is `greater` the criteria for checking is `(anch&gt;=pos) and (anch!=neg)&#39;.
+
+    # Outputs:
+        None.
+    &#39;&#39;&#39;
+    y_s = np.zeros((len(triplets.T),3))-1
+    for ind in range(len(triplets.T)):
+        i,j,k = triplets.T[ind]
+        [y[X==i],y[X==j],y[X==k]] 
+        y_s[ind,:] = [y[X==i],y[X==j],y[X==k]]
+    pos_hist = np.zeros((5,5))
+    neg_hist = np.zeros((5,5))
+    anch_hist = np.histogram(y_s[:,0], bins=[0, 1, 2, 3,4,5])[0]
+    for i in range(5):
+        pos_hist[i,:] = np.histogram(y_s[:,1][y_s[:,0]==i], bins=[0, 1, 2, 3,4,5])[0]
+    for i in range(5):
+        neg_hist[i,:] = np.histogram(y_s[:,2][y_s[:,0]==i], bins=[0, 1, 2, 3,4,5])[0]
+    print(anch_hist,&#39;\n&#39;,pos_hist,&#39;\n&#39;,neg_hist)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="Siameser.utils.tripler"><code class="name flex">
+<span>def <span class="ident">tripler</span></span>(<span>X, y, classnames=None, triplets_dist_anch={}, triplets_dist_pos={}, triplets_dist_neg={})</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generates a list of triplets to train the Siamese Model of the following form <code>[anchor, positive, negative]</code>. The distribution of the <code>anchor</code>, <code>positive</code> and <code>negative</code> depends on the arguments passed to the function. </p>
+<h1 id="example">Example</h1>
+<pre><code class="python">triplets_dist_anch = {}
+triplets_dist_pos = {
+    '1':{
+        '0':0.8,
+    },
+    '2':{
+        '0':0.1,
+        '1':0.7,
+    },
+    '3':{
+        '0':0.05,
+        '1':0.15,
+        '2':0.6,
+    }
+}
+triplets_dist_neg = {
+    '1':{
+        '2':0.7,
+        '3':0.2,
+    },
+    '2':{
+        '3':0.8,
+    },
+    '3':{
+        '2':0.1,
+        '4':0.8
+    }
+}
+
+triplets = tripler(X,y, triplets_dist_anch=triplets_dist_anch, triplets_dist_pos=triplets_dist_pos, triplets_dist_neg=triplets_dist_neg)
+
+</code></pre>
+<h1 id="arguments">Arguments</h1>
+<pre><code>X: numpy array with the examples names.
+y: labels for the examples.
+classnames: list with labels. The default is `None` the classnames is `set(y)`.
+triplets_dist_anch: Dictionary discribes the distribution for sampling the examples of the anchor column. It should be in the following form.
+    ```python
+    triplets_dist_anch = {
+        'label_1': ratio_1,
+        'label_2': ratio_2,
+        ...
+        'label_N': ratio_N,
+    }
+
+    ```
+The sum of ratios must be less than or equal to 1. The dictionary doesn't have to include all labels. The examples that aren't specified in the dictionary will be sampled from with equal probabilities for each example and sum equal to `1-sum(ratios)`.
+triplets_dist_pos: Dictionary with labels as keys and dictionary describing the distribution for positive column as values. It should be in the following form.
+    ```python
+    triplets_dist_pos = {
+        'label_1': {
+            'label_1': ratio_1,
+            'label_2': ratio_2,
+            ...
+            'label_N': ratio_N,                       
+        },
+        'label_2': {
+            'label_1': ratio_1,
+            'label_2': ratio_2,
+            ...
+            'label_N': ratio_N,
+        },
+        ...
+        'label_N': {
+            'label_1': ratio_1,
+            'label_2': ratio_2,
+            ...
+            'label_N': ratio_N,
+        }
+    }
+
+    ```
+The sum of ratios must be less than or equal to 1. None of the dictionaries have to include all labels. The remaining `1 - ratio` will be picked randomly from `X[y==label]`.
+triplets_dist_neg: Dictionary with labels as keys and dictionary describing the distribution for positive column as values. It should have the same form as triplets_dist_pos. The remaining `1 - ratio` will be picked randomly from `X[y!=label]`.
+</code></pre>
+<h1 id="outputs">Outputs:</h1>
+<pre><code>X_triplet: list of length `len(X)` each element is a list `[anchor, positive, negative]`.
+</code></pre></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def tripler(X,y,classnames=None,triplets_dist_anch={}, triplets_dist_pos = {}, triplets_dist_neg = {}):
+    &#39;&#39;&#39;
+    Generates a list of triplets to train the Siamese Model of the following form `[anchor, positive, negative]`. The distribution of the `anchor`, `positive` and `negative` depends on the arguments passed to the function. 
+
+    # Example
+
+    ```python
+    triplets_dist_anch = {}
+    triplets_dist_pos = {
+        &#39;1&#39;:{
+            &#39;0&#39;:0.8,
+        },
+        &#39;2&#39;:{
+            &#39;0&#39;:0.1,
+            &#39;1&#39;:0.7,
+        },
+        &#39;3&#39;:{
+            &#39;0&#39;:0.05,
+            &#39;1&#39;:0.15,
+            &#39;2&#39;:0.6,
+        }
+    }
+    triplets_dist_neg = {
+        &#39;1&#39;:{
+            &#39;2&#39;:0.7,
+            &#39;3&#39;:0.2,
+        },
+        &#39;2&#39;:{
+            &#39;3&#39;:0.8,
+        },
+        &#39;3&#39;:{
+            &#39;2&#39;:0.1,
+            &#39;4&#39;:0.8
+        }
+    }
+    
+    triplets = tripler(X,y, triplets_dist_anch=triplets_dist_anch, triplets_dist_pos=triplets_dist_pos, triplets_dist_neg=triplets_dist_neg)
+
+    ```
+
+    # Arguments
+        X: numpy array with the examples names.
+        y: labels for the examples.
+        classnames: list with labels. The default is `None` the classnames is `set(y)`.
+        triplets_dist_anch: Dictionary discribes the distribution for sampling the examples of the anchor column. It should be in the following form.
+            ```python
+            triplets_dist_anch = {
+                &#39;label_1&#39;: ratio_1,
+                &#39;label_2&#39;: ratio_2,
+                ...
+                &#39;label_N&#39;: ratio_N,
+            }
+
+            ```
+        The sum of ratios must be less than or equal to 1. The dictionary doesn&#39;t have to include all labels. The examples that aren&#39;t specified in the dictionary will be sampled from with equal probabilities for each example and sum equal to `1-sum(ratios)`.
+        triplets_dist_pos: Dictionary with labels as keys and dictionary describing the distribution for positive column as values. It should be in the following form.
+            ```python
+            triplets_dist_pos = {
+                &#39;label_1&#39;: {
+                    &#39;label_1&#39;: ratio_1,
+                    &#39;label_2&#39;: ratio_2,
+                    ...
+                    &#39;label_N&#39;: ratio_N,                       
+                },
+                &#39;label_2&#39;: {
+                    &#39;label_1&#39;: ratio_1,
+                    &#39;label_2&#39;: ratio_2,
+                    ...
+                    &#39;label_N&#39;: ratio_N,
+                },
+                ...
+                &#39;label_N&#39;: {
+                    &#39;label_1&#39;: ratio_1,
+                    &#39;label_2&#39;: ratio_2,
+                    ...
+                    &#39;label_N&#39;: ratio_N,
+                }
+            }
+
+            ```
+        The sum of ratios must be less than or equal to 1. None of the dictionaries have to include all labels. The remaining `1 - ratio` will be picked randomly from `X[y==label]`.
+        triplets_dist_neg: Dictionary with labels as keys and dictionary describing the distribution for positive column as values. It should have the same form as triplets_dist_pos. The remaining `1 - ratio` will be picked randomly from `X[y!=label]`.
+
+    # Outputs:
+        X_triplet: list of length `len(X)` each element is a list `[anchor, positive, negative]`.
+
+     &#39;&#39;&#39;
+    y = y.astype(int)
+    if not classnames:
+        classnames = set(y)
+    Pr = np.zeros(y.shape)
+    rem_mask = np.array([False]*len(y))
+    for class_name in classnames:
+        if str(class_name) in triplets_dist_anch: 
+            Pr[(y==class_name)] = triplets_dist_anch[str(class_name)]/np.sum((y==class_name))
+        else:
+            rem_mask[y==class_name] = True
+    if np.sum(rem_mask) &gt; 0:
+        Pr[rem_mask] = (1-np.sum(Pr))/np.sum(rem_mask)
+    indexes_picker = np.random.choice(np.arange(len(y)), len(X), p=Pr)
+    X_anch = X[indexes_picker]
+    y_anch = y[indexes_picker]
+    anchor = np.empty(len(X), dtype=object)
+    positive = np.empty(len(X), dtype=object)
+    negative = np.empty(len(X), dtype=object)
+    index_arr = 0
+    for class_name in classnames:
+        anchor_tmp = X_anch[(y_anch==class_name)]
+        if len(anchor_tmp) == 0:
+            continue
+        anchor[index_arr:len(anchor_tmp)+index_arr] = anchor_tmp
+        index_pos = index_arr
+        if str(class_name) in triplets_dist_pos: 
+            tmp_dict = triplets_dist_pos[str(class_name)]
+            assert(sum(tmp_dict.values()) &lt;= 1)
+            for c in tmp_dict.keys():
+                ln = int(tmp_dict[c]*len(anchor_tmp))
+                class_name_2 = int(c)
+                positive[index_pos:ln+index_pos] = list(np.random.choice(X[(y==class_name_2)], ln))
+                index_pos += ln
+        remaining = len(anchor_tmp) - (index_pos - index_arr)
+        assert(remaining &gt;= 0)
+        if remaining &gt; 0:
+            positive[index_pos:remaining+index_pos] = (list(np.random.choice(X[(y==class_name)], remaining)))
+        index_neg = index_arr
+        if str(class_name) in triplets_dist_neg: 
+            tmp_dict = triplets_dist_neg[str(class_name)]
+            assert(sum(tmp_dict.values()) &lt;= 1)
+            for c in tmp_dict.keys():
+                ln = int(tmp_dict[c]*len(anchor_tmp))
+                class_name_2 = int(c)
+                negative[index_neg:ln+index_neg] = list(np.random.choice(X[(y==class_name_2)], ln))
+                index_neg += ln
+        
+        remaining = len(anchor_tmp) - (index_neg - index_arr)
+        assert(remaining &gt;= 0)
+        if remaining &gt; 0:
+            negative[index_neg:remaining+index_neg] = (list(np.random.choice(X[(y!=class_name)], remaining)))
+        index_arr += len(anchor_tmp)
+    X_triplet = np.append(anchor.reshape(1, -1), np.append(positive.reshape(1, -1), negative.reshape(1, -1), axis=0), axis=0)
+    return X_triplet</code></pre>
+</details>
+</dd>
+<dt id="Siameser.utils.tripler_valid"><code class="name flex">
+<span>def <span class="ident">tripler_valid</span></span>(<span>X, y, classnames=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generates triplets for validation. The elements of each class are repeated the number of other classes each instance for one class. It has the following form.</p>
+<pre><code class="python">
+['label_1', 'label_1','label_2']
+['label_1', 'label_1','label_2']
+...
+['label_1', 'label_1','label_3']
+['label_1', 'label_1','label_3']
+...
+['label_1', 'label_1','label_N']
+['label_1', 'label_1','label_N']
+['label_2', 'label_2','label_1']
+['label_2', 'label_2','label_1']
+...
+['label_2', 'label_2','label_3']
+['label_2', 'label_2','label_3']
+...
+['label_2', 'label_2','label_N']
+['label_2', 'label_2','label_N']
+...
+['label_N', 'label_N','label_1']
+['label_N', 'label_N','label_1']
+...
+['label_N', 'label_N','label_N-1']
+['label_N', 'label_N','label_N-1']
+
+</code></pre>
+<h1 id="arguments">Arguments</h1>
+<pre><code>X: numpy array with the examples names.
+y: labels for the examples.
+classnames: list with labels. The default is `None` the classnames is `set(y)`.
+</code></pre>
+<h1 id="outputs">Outputs</h1>
+<pre><code>X_triplet: list of length `2*(len(classnames)-1)*len(X)` has the distribution as describes above.
+</code></pre></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def tripler_valid(X,y,classnames=None):
+    &#39;&#39;&#39;
+    Generates triplets for validation. The elements of each class are repeated the number of other classes each instance for one class. It has the following form.
+    ```python
+
+    [&#39;label_1&#39;, &#39;label_1&#39;,&#39;label_2&#39;]
+    [&#39;label_1&#39;, &#39;label_1&#39;,&#39;label_2&#39;]
+    ...
+    [&#39;label_1&#39;, &#39;label_1&#39;,&#39;label_3&#39;]
+    [&#39;label_1&#39;, &#39;label_1&#39;,&#39;label_3&#39;]
+    ...
+    [&#39;label_1&#39;, &#39;label_1&#39;,&#39;label_N&#39;]
+    [&#39;label_1&#39;, &#39;label_1&#39;,&#39;label_N&#39;]
+    [&#39;label_2&#39;, &#39;label_2&#39;,&#39;label_1&#39;]
+    [&#39;label_2&#39;, &#39;label_2&#39;,&#39;label_1&#39;]
+    ...
+    [&#39;label_2&#39;, &#39;label_2&#39;,&#39;label_3&#39;]
+    [&#39;label_2&#39;, &#39;label_2&#39;,&#39;label_3&#39;]
+    ...
+    [&#39;label_2&#39;, &#39;label_2&#39;,&#39;label_N&#39;]
+    [&#39;label_2&#39;, &#39;label_2&#39;,&#39;label_N&#39;]
+    ...
+    [&#39;label_N&#39;, &#39;label_N&#39;,&#39;label_1&#39;]
+    [&#39;label_N&#39;, &#39;label_N&#39;,&#39;label_1&#39;]
+    ...
+    [&#39;label_N&#39;, &#39;label_N&#39;,&#39;label_N-1&#39;]
+    [&#39;label_N&#39;, &#39;label_N&#39;,&#39;label_N-1&#39;]
+
+    ``` 
+
+    # Arguments
+        X: numpy array with the examples names.
+        y: labels for the examples.
+        classnames: list with labels. The default is `None` the classnames is `set(y)`.
+
+    # Outputs
+        X_triplet: list of length `2*(len(classnames)-1)*len(X)` has the distribution as describes above.
+
+    &#39;&#39;&#39;
+    if not classnames:
+        classnames = set(y)
+    anchor = np.empty(2*(len(classnames)-1)*len(X), dtype=object)
+    positive = np.empty(2*(len(classnames)-1)*len(X), dtype=object)
+    negative = np.empty(2*(len(classnames)-1)*len(X), dtype=object)
+    index_arr = 0
+    for class_1 in classnames:
+        for class_2 in classnames:
+            if class_1 == class_2:
+                continue
+            picked_Xs = X[(y == class_1) | (y == class_2)]
+            picked_Ys = y[(y == class_1) | (y == class_2)]
+            classnames_2s = set([class_1,class_2])
+            for class_name in classnames_2s:
+                anchor_tmp = picked_Xs[(picked_Ys==class_name)]
+                anchor[index_arr:len(anchor_tmp)+index_arr] = anchor_tmp
+                positive[index_arr:len(anchor_tmp)+index_arr] = (list(np.random.choice(picked_Xs[(picked_Ys==class_name)], (len(anchor_tmp)))))
+                negative[index_arr:len(anchor_tmp)+index_arr] = (list(np.random.choice(picked_Xs[(picked_Ys!=class_name)], (len(anchor_tmp)))))
+                index_arr += len(anchor_tmp)
+    X_triplet_valid = np.append(anchor.reshape(1, -1), np.append(positive.reshape(1, -1), negative.reshape(1, -1), axis=0), axis=0)
+    return X_triplet_valid</code></pre>
+</details>
+</dd>
+<dt id="Siameser.utils.triplets_checker"><code class="name flex">
+<span>def <span class="ident">triplets_checker</span></span>(<span>X, y, triplets, pos_method='equal')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Checks if the triplets follows is formed correctly based on <code>pos_method</code>.</p>
+<h1 id="example">Example</h1>
+<pre><code class="python">if triplets_checker(X, y, triplets):
+    print('All examples have the positive as the same class of the anchor and the negative is not of the same class.')
+else:
+    print('The triplets aren't correct.')
+</code></pre>
+<h1 id="arguments">Arguments</h1>
+<pre><code>X: numpy array with the examples names.
+y: labels for the examples.
+triplet: list with each element is a list of 3 elements to be cheched.
+pos_method: if the value is `equal` the criteria for checking is `(anch==pos) and (anch!=neg)'. if the value is `greater` the criteria for checking is `(anch&gt;=pos) and (anch!=neg)'.
+</code></pre>
+<h1 id="outputs">Outputs:</h1>
+<pre><code>bool value True or False.
+</code></pre></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def triplets_checker(X,y, triplets, pos_method=&#39;equal&#39;):
+    &#39;&#39;&#39;
+    Checks if the triplets follows is formed correctly based on `pos_method`.
+    # Example
+    ```python
+    if triplets_checker(X, y, triplets):
+        print(&#39;All examples have the positive as the same class of the anchor and the negative is not of the same class.&#39;)
+    else:
+        print(&#39;The triplets aren&#39;t correct.&#39;)
+    ```
+
+    # Arguments
+        X: numpy array with the examples names.
+        y: labels for the examples.
+        triplet: list with each element is a list of 3 elements to be cheched.
+        pos_method: if the value is `equal` the criteria for checking is `(anch==pos) and (anch!=neg)&#39;. if the value is `greater` the criteria for checking is `(anch&gt;=pos) and (anch!=neg)&#39;.
+
+    # Outputs:
+        bool value True or False.
+    &#39;&#39;&#39;
+
+
+    if pos_method==&#39;equal&#39;:
+        return all([(y[X==i] == y[X==j]) and (y[X==i] != y[X==k]) for i,j,k in triplets.T])
+    elif pos_method==&#39;greater&#39;:
+        return all([(y[X==i] &gt;= y[X==j]) and (y[X==i] != y[X==k]) for i,j,k in triplets.T])</code></pre>
+</details>
+</dd>
+<dt id="Siameser.utils.triplets_dist_display"><code class="name flex">
+<span>def <span class="ident">triplets_dist_display</span></span>(<span>X, y, triplets)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>prints histogram of the anchor column and 2 matrices, one for positve column and the other for the negative. Each matrix has the rows as the histogram for each class.</p>
+<h1 id="example">Example</h1>
+<pre><code class="python">triplets_dist_display(X, y, triplets):
+</code></pre>
+<h1 id="arguments">Arguments</h1>
+<pre><code>X: numpy array with the examples names.
+y: labels for the examples.
+triplet: list with each element is a list of 3 elements to be cheched.
+pos_method: if the value is `equal` the criteria for checking is `(anch==pos) and (anch!=neg)'. if the value is `greater` the criteria for checking is `(anch&gt;=pos) and (anch!=neg)'.
+</code></pre>
+<h1 id="outputs">Outputs:</h1>
+<pre><code>None.
+</code></pre></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def triplets_dist_display(X,y,triplets):
+    &#39;&#39;&#39;
+    prints histogram of the anchor column and 2 matrices, one for positve column and the other for the negative. Each matrix has the rows as the histogram for each class.
+
+    # Example
+    ```python
+    triplets_dist_display(X, y, triplets):
+    ```
+
+    # Arguments
+        X: numpy array with the examples names.
+        y: labels for the examples.
+        triplet: list with each element is a list of 3 elements to be cheched.
+        pos_method: if the value is `equal` the criteria for checking is `(anch==pos) and (anch!=neg)&#39;. if the value is `greater` the criteria for checking is `(anch&gt;=pos) and (anch!=neg)&#39;.
+
+    # Outputs:
+        None.
+    &#39;&#39;&#39;
+    y_s = np.zeros((len(triplets.T),3))-1
+    for ind in range(len(triplets.T)):
+        i,j,k = triplets.T[ind]
+        [y[X==i],y[X==j],y[X==k]] 
+        y_s[ind,:] = [y[X==i],y[X==j],y[X==k]]
+    pos_hist = np.zeros((5,5))
+    neg_hist = np.zeros((5,5))
+    anch_hist = np.histogram(y_s[:,0], bins=[0, 1, 2, 3,4,5])[0]
+    for i in range(5):
+        pos_hist[i,:] = np.histogram(y_s[:,1][y_s[:,0]==i], bins=[0, 1, 2, 3,4,5])[0]
+    for i in range(5):
+        neg_hist[i,:] = np.histogram(y_s[:,2][y_s[:,0]==i], bins=[0, 1, 2, 3,4,5])[0]
+    print(anch_hist,&#39;\n&#39;,pos_hist,&#39;\n&#39;,neg_hist)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="Siameser" href="index.html">Siameser</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="Siameser.utils.tripler" href="#Siameser.utils.tripler">tripler</a></code></li>
+<li><code><a title="Siameser.utils.tripler_valid" href="#Siameser.utils.tripler_valid">tripler_valid</a></code></li>
+<li><code><a title="Siameser.utils.triplets_checker" href="#Siameser.utils.triplets_checker">triplets_checker</a></code></li>
+<li><code><a title="Siameser.utils.triplets_dist_display" href="#Siameser.utils.triplets_dist_display">triplets_dist_display</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

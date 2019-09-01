@@ -1,3 +1,9 @@
+import keras
+import keras.backend as K
+from keras.layers import Input, Subtract, Multiply, Lambda
+from keras.models import Model
+
+
 def siamese_modeller(model, input_shape=(256,256,3)):
     '''Generates a Siamese Model based on the `model` passed to the function as a feature encoder.
     

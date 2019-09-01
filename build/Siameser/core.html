@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>Siameser.core API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>Siameser.core</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">import keras
+import keras.backend as K
+from keras.layers import Input, Subtract, Multiply, Lambda
+from keras.models import Model
+
+
+def siamese_modeller(model, input_shape=(256,256,3)):
+    &#39;&#39;&#39;Generates a Siamese Model based on the `model` passed to the function as a feature encoder.
+    
+    # Examples
+    
+    ```python
+        model = Sequential()
+        model.add(Conv2D(64, (3,3), input_shape=input_shape, activation=&#39;relu&#39;))
+        model.add(Conv2D(128, (3,3), activation=&#39;relu&#39;))
+        model.add(GlobalAveragePooling2D())
+        siamese_model = siamese_modeller(model, input_shape=input_shape)   
+    ```
+
+    ```python
+        input_shape = (224,224,3)
+        input_tensor = Input(shape=input_shape)
+        base_model = VGG19(include_top=False, weights=&#39;imagenet&#39;, input_tensor=input_tensor, input_shape=None, pooling=&#39;max&#39;)
+        x = Dense(1024, activation=&#39;relu&#39;)(base_model.output)
+        x = Dense(1024, activation=&#39;relu&#39;)(x)
+        x = Dense(128, activation=&#39;sigmoid&#39;)(x)
+        model = Model(inputs=input_tensor, outputs=[x])
+        siamese_model = siamese_modeller(model, input_shape=input_shape)   
+    ```
+
+    # Arguments
+        model: Keras model to be trained.
+        input_shape: the shape of the input.
+
+    # Outputs
+        siamese_net: A siamese NN that takes 3 inputs ordered as (anchor, positve, negative) and outputs the difference between the distances between the anchor and the positive and the anchor and the negative example. 
+        
+            `Distance_A_P - Distance_A_N`
+
+     &#39;&#39;&#39;
+    print(&#34;Creating and training the model...&#34;)
+    print(&#34;Stacking the layers...&#34;)    
+    anchor_input = Input(input_shape)
+    positive_input = Input(input_shape)
+    negative_input = Input(input_shape)
+    encoded_A = model(anchor_input)
+    encoded_P = model(positive_input)
+    encoded_N = model(negative_input)
+    s_A_P = Subtract()([encoded_A, encoded_P])
+    s_A_N = Subtract()([encoded_A, encoded_N])
+    d_A_P = Multiply()([s_A_P,s_A_P])
+    d_A_N = Multiply()([s_A_N,s_A_N])
+    diff = Subtract()([d_A_P,d_A_N])
+    laam = Lambda(lambda x: K.sum(x,axis=-1),output_shape=(1,))
+    dist = laam(diff)
+    siamese_net = Model(inputs=[anchor_input,positive_input,negative_input],outputs=dist)
+    return siamese_net
+
+def metric(y_true, y_pred):
+    &#39;&#39;&#39;
+    Returns the ratio of examples of the batch that satisfies `y_pred &lt; 0`.
+    &#39;&#39;&#39;
+    return K.sum(K.cast(K.greater(K.constant(0.0,shape=(1,)),y_pred), tf.float32))/K.cast(tf.shape(y_pred)[0], tf.float32)
+
+def loss(y_true,y_pred):
+    &#39;&#39;&#39;
+    Return the loss calculated `y_pred + alpha if y_pred + alpha &gt; 0 and 0 otherwise` where alpha is a hyperparameter.
+    &#39;&#39;&#39;
+    return K.maximum(y_pred + alpha,0)
+
+class siamese_DataGenerator(keras.utils.Sequence):
+    &#39;&#39;&#39;
+        sample datagenerator for Siamese Model. Check utils documentation for further info on the attributes of the class.
+    &#39;&#39;&#39;
+    &#39;Generates data for Keras&#39;
+    def __init__(self, X,y, batch_size=32, dim=(128,128), n_channels=3,
+                 n_classes=10,is_train=True, shuffle=True, is_augment=True, augmentor=None, execlude=None, n_epochs=1,
+                 triplets_dist_anch = {}, triplets_dist_pos = {},triplets_dist_neg = {}):
+        &#39;Initialization&#39;
+        self.dim = dim
+        self.batch_size = batch_size
+        self.augmentor = augmentor
+        self.X = X
+        self.y = y
+        self.n_channels = n_channels
+        self.n_classes = n_classes
+        self.shuffle = shuffle
+        self.is_augment = is_augment
+        self.is_train = is_train
+        self.execlude = execlude
+        self.n_epochs = n_epochs
+        self.triplets_dist_anch = triplets_dist_anch
+        self.triplets_dist_neg = triplets_dist_neg
+        self.triplets_dist_pos = triplets_dist_pos
+        self.epoch = -1
+        self.on_epoch_end()
+
+    def __len__(self):
+        &#39;Denotes the number of batches per epoch&#39;
+        return int(np.floor(len(self.list_IDs[0,:]) / self.batch_size)/self.n_epochs)
+
+    def __getitem__(self, index):
+        &#39;Generate one batch of data&#39;
+        # Generate indexes of the batch
+        indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
+        # Find list of IDs
+#         print(in)
+        list_IDs_temp = [self.list_IDs[:, k] for k in indexes]
+
+        # Generate data
+        X, y = self.__data_generation(list_IDs_temp)
+
+        return X,y
+
+    def on_epoch_end(self):
+        &#39;Updates indexes after each epoch&#39;        
+        self.epoch = self.epoch+1
+        if self.is_train and ((self.epoch % self.n_epochs) == 0):
+            print(&#39;Updating the training triplets...&#39;)
+            self.list_IDs = tripler(self.X,self.y, execlude=self.execlude, triplets_dist_anch= self.triplets_dist_anch, triplets_dist_pos=self.triplets_dist_pos, triplets_dist_neg=self.triplets_dist_neg)
+            self.indexes = np.arange(len(self.list_IDs[0,:]))
+            if self.shuffle == True:
+                np.random.shuffle(self.indexes)
+        elif self.is_train == False:
+            self.list_IDs = tripler_valid(self.X,self.y)
+            self.indexes = np.arange(len(self.list_IDs[0,:]))
+            if self.shuffle == True:
+                np.random.shuffle(self.indexes)
+        
+    def __data_generation(self, list_IDs_temp):
+        &#39;Generates data containing batch_size samples&#39; # X : (n_samples, *dim, n_channels)
+        # Initialization
+        X = [np.zeros((self.batch_size, *self.dim, self.n_channels), dtype=&#39;float16&#39;) for i in range(3)]
+        y = np.empty((self.batch_size, 4096*3))
+        # Generate data
+        for i, ID in enumerate(list_IDs_temp):
+            for j in range(3):
+                img = load_img(src_path+name+&#39;.jpg&#39;,  self.dim[:2])
+                img = img_to_array(img)
+                if(self.is_augment and self.augmentor):
+                    img = self.augmentor(img)
+                X[j][i,:,:,:] = img
+        return X, y</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="Siameser.core.loss"><code class="name flex">
+<span>def <span class="ident">loss</span></span>(<span>y_true, y_pred)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Return the loss calculated <code>y_pred + alpha if y_pred + alpha &gt; 0 and 0 otherwise</code> where alpha is a hyperparameter.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def loss(y_true,y_pred):
+    &#39;&#39;&#39;
+    Return the loss calculated `y_pred + alpha if y_pred + alpha &gt; 0 and 0 otherwise` where alpha is a hyperparameter.
+    &#39;&#39;&#39;
+    return K.maximum(y_pred + alpha,0)</code></pre>
+</details>
+</dd>
+<dt id="Siameser.core.metric"><code class="name flex">
+<span>def <span class="ident">metric</span></span>(<span>y_true, y_pred)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the ratio of examples of the batch that satisfies <code>y_pred &lt; 0</code>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def metric(y_true, y_pred):
+    &#39;&#39;&#39;
+    Returns the ratio of examples of the batch that satisfies `y_pred &lt; 0`.
+    &#39;&#39;&#39;
+    return K.sum(K.cast(K.greater(K.constant(0.0,shape=(1,)),y_pred), tf.float32))/K.cast(tf.shape(y_pred)[0], tf.float32)</code></pre>
+</details>
+</dd>
+<dt id="Siameser.core.siamese_modeller"><code class="name flex">
+<span>def <span class="ident">siamese_modeller</span></span>(<span>model, input_shape=(256, 256, 3))</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generates a Siamese Model based on the <code>model</code> passed to the function as a feature encoder.</p>
+<h1 id="examples">Examples</h1>
+<pre><code class="python">    model = Sequential()
+    model.add(Conv2D(64, (3,3), input_shape=input_shape, activation='relu'))
+    model.add(Conv2D(128, (3,3), activation='relu'))
+    model.add(GlobalAveragePooling2D())
+    siamese_model = siamese_modeller(model, input_shape=input_shape)   
+</code></pre>
+<pre><code class="python">    input_shape = (224,224,3)
+    input_tensor = Input(shape=input_shape)
+    base_model = VGG19(include_top=False, weights='imagenet', input_tensor=input_tensor, input_shape=None, pooling='max')
+    x = Dense(1024, activation='relu')(base_model.output)
+    x = Dense(1024, activation='relu')(x)
+    x = Dense(128, activation='sigmoid')(x)
+    model = Model(inputs=input_tensor, outputs=[x])
+    siamese_model = siamese_modeller(model, input_shape=input_shape)   
+</code></pre>
+<h1 id="arguments">Arguments</h1>
+<pre><code>model: Keras model to be trained.
+input_shape: the shape of the input.
+</code></pre>
+<h1 id="outputs">Outputs</h1>
+<pre><code>siamese_net: A siamese NN that takes 3 inputs ordered as (anchor, positve, negative) and outputs the difference between the distances between the anchor and the positive and the anchor and the negative example.
+
+    `Distance_A_P - Distance_A_N`
+</code></pre></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def siamese_modeller(model, input_shape=(256,256,3)):
+    &#39;&#39;&#39;Generates a Siamese Model based on the `model` passed to the function as a feature encoder.
+    
+    # Examples
+    
+    ```python
+        model = Sequential()
+        model.add(Conv2D(64, (3,3), input_shape=input_shape, activation=&#39;relu&#39;))
+        model.add(Conv2D(128, (3,3), activation=&#39;relu&#39;))
+        model.add(GlobalAveragePooling2D())
+        siamese_model = siamese_modeller(model, input_shape=input_shape)   
+    ```
+
+    ```python
+        input_shape = (224,224,3)
+        input_tensor = Input(shape=input_shape)
+        base_model = VGG19(include_top=False, weights=&#39;imagenet&#39;, input_tensor=input_tensor, input_shape=None, pooling=&#39;max&#39;)
+        x = Dense(1024, activation=&#39;relu&#39;)(base_model.output)
+        x = Dense(1024, activation=&#39;relu&#39;)(x)
+        x = Dense(128, activation=&#39;sigmoid&#39;)(x)
+        model = Model(inputs=input_tensor, outputs=[x])
+        siamese_model = siamese_modeller(model, input_shape=input_shape)   
+    ```
+
+    # Arguments
+        model: Keras model to be trained.
+        input_shape: the shape of the input.
+
+    # Outputs
+        siamese_net: A siamese NN that takes 3 inputs ordered as (anchor, positve, negative) and outputs the difference between the distances between the anchor and the positive and the anchor and the negative example. 
+        
+            `Distance_A_P - Distance_A_N`
+
+     &#39;&#39;&#39;
+    print(&#34;Creating and training the model...&#34;)
+    print(&#34;Stacking the layers...&#34;)    
+    anchor_input = Input(input_shape)
+    positive_input = Input(input_shape)
+    negative_input = Input(input_shape)
+    encoded_A = model(anchor_input)
+    encoded_P = model(positive_input)
+    encoded_N = model(negative_input)
+    s_A_P = Subtract()([encoded_A, encoded_P])
+    s_A_N = Subtract()([encoded_A, encoded_N])
+    d_A_P = Multiply()([s_A_P,s_A_P])
+    d_A_N = Multiply()([s_A_N,s_A_N])
+    diff = Subtract()([d_A_P,d_A_N])
+    laam = Lambda(lambda x: K.sum(x,axis=-1),output_shape=(1,))
+    dist = laam(diff)
+    siamese_net = Model(inputs=[anchor_input,positive_input,negative_input],outputs=dist)
+    return siamese_net</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="Siameser.core.siamese_DataGenerator"><code class="flex name class">
+<span>class <span class="ident">siamese_DataGenerator</span></span>
+<span>(</span><span>X, y, batch_size=32, dim=(128, 128), n_channels=3, n_classes=10, is_train=True, shuffle=True, is_augment=True, augmentor=None, execlude=None, n_epochs=1, triplets_dist_anch={}, triplets_dist_pos={}, triplets_dist_neg={})</span>
+</code></dt>
+<dd>
+<section class="desc"><p>sample datagenerator for Siamese Model. Check utils documentation for further info on the attributes of the class.</p>
+<p>Initialization</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class siamese_DataGenerator(keras.utils.Sequence):
+    &#39;&#39;&#39;
+        sample datagenerator for Siamese Model. Check utils documentation for further info on the attributes of the class.
+    &#39;&#39;&#39;
+    &#39;Generates data for Keras&#39;
+    def __init__(self, X,y, batch_size=32, dim=(128,128), n_channels=3,
+                 n_classes=10,is_train=True, shuffle=True, is_augment=True, augmentor=None, execlude=None, n_epochs=1,
+                 triplets_dist_anch = {}, triplets_dist_pos = {},triplets_dist_neg = {}):
+        &#39;Initialization&#39;
+        self.dim = dim
+        self.batch_size = batch_size
+        self.augmentor = augmentor
+        self.X = X
+        self.y = y
+        self.n_channels = n_channels
+        self.n_classes = n_classes
+        self.shuffle = shuffle
+        self.is_augment = is_augment
+        self.is_train = is_train
+        self.execlude = execlude
+        self.n_epochs = n_epochs
+        self.triplets_dist_anch = triplets_dist_anch
+        self.triplets_dist_neg = triplets_dist_neg
+        self.triplets_dist_pos = triplets_dist_pos
+        self.epoch = -1
+        self.on_epoch_end()
+
+    def __len__(self):
+        &#39;Denotes the number of batches per epoch&#39;
+        return int(np.floor(len(self.list_IDs[0,:]) / self.batch_size)/self.n_epochs)
+
+    def __getitem__(self, index):
+        &#39;Generate one batch of data&#39;
+        # Generate indexes of the batch
+        indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
+        # Find list of IDs
+#         print(in)
+        list_IDs_temp = [self.list_IDs[:, k] for k in indexes]
+
+        # Generate data
+        X, y = self.__data_generation(list_IDs_temp)
+
+        return X,y
+
+    def on_epoch_end(self):
+        &#39;Updates indexes after each epoch&#39;        
+        self.epoch = self.epoch+1
+        if self.is_train and ((self.epoch % self.n_epochs) == 0):
+            print(&#39;Updating the training triplets...&#39;)
+            self.list_IDs = tripler(self.X,self.y, execlude=self.execlude, triplets_dist_anch= self.triplets_dist_anch, triplets_dist_pos=self.triplets_dist_pos, triplets_dist_neg=self.triplets_dist_neg)
+            self.indexes = np.arange(len(self.list_IDs[0,:]))
+            if self.shuffle == True:
+                np.random.shuffle(self.indexes)
+        elif self.is_train == False:
+            self.list_IDs = tripler_valid(self.X,self.y)
+            self.indexes = np.arange(len(self.list_IDs[0,:]))
+            if self.shuffle == True:
+                np.random.shuffle(self.indexes)
+        
+    def __data_generation(self, list_IDs_temp):
+        &#39;Generates data containing batch_size samples&#39; # X : (n_samples, *dim, n_channels)
+        # Initialization
+        X = [np.zeros((self.batch_size, *self.dim, self.n_channels), dtype=&#39;float16&#39;) for i in range(3)]
+        y = np.empty((self.batch_size, 4096*3))
+        # Generate data
+        for i, ID in enumerate(list_IDs_temp):
+            for j in range(3):
+                img = load_img(src_path+name+&#39;.jpg&#39;,  self.dim[:2])
+                img = img_to_array(img)
+                if(self.is_augment and self.augmentor):
+                    img = self.augmentor(img)
+                X[j][i,:,:,:] = img
+        return X, y</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>keras.utils.data_utils.Sequence</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="Siameser.core.siamese_DataGenerator.on_epoch_end"><code class="name flex">
+<span>def <span class="ident">on_epoch_end</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Updates indexes after each epoch</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def on_epoch_end(self):
+    &#39;Updates indexes after each epoch&#39;        
+    self.epoch = self.epoch+1
+    if self.is_train and ((self.epoch % self.n_epochs) == 0):
+        print(&#39;Updating the training triplets...&#39;)
+        self.list_IDs = tripler(self.X,self.y, execlude=self.execlude, triplets_dist_anch= self.triplets_dist_anch, triplets_dist_pos=self.triplets_dist_pos, triplets_dist_neg=self.triplets_dist_neg)
+        self.indexes = np.arange(len(self.list_IDs[0,:]))
+        if self.shuffle == True:
+            np.random.shuffle(self.indexes)
+    elif self.is_train == False:
+        self.list_IDs = tripler_valid(self.X,self.y)
+        self.indexes = np.arange(len(self.list_IDs[0,:]))
+        if self.shuffle == True:
+            np.random.shuffle(self.indexes)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="Siameser" href="index.html">Siameser</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="Siameser.core.loss" href="#Siameser.core.loss">loss</a></code></li>
+<li><code><a title="Siameser.core.metric" href="#Siameser.core.metric">metric</a></code></li>
+<li><code><a title="Siameser.core.siamese_modeller" href="#Siameser.core.siamese_modeller">siamese_modeller</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="Siameser.core.siamese_DataGenerator" href="#Siameser.core.siamese_DataGenerator">siamese_DataGenerator</a></code></h4>
+<ul class="">
+<li><code><a title="Siameser.core.siamese_DataGenerator.on_epoch_end" href="#Siameser.core.siamese_DataGenerator.on_epoch_end">on_epoch_end</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
