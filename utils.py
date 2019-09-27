@@ -249,15 +249,16 @@ def triplets_dist_display(X,y,triplets):
         None.
     '''
     y_s = np.zeros((len(triplets.T),3))-1
+    n_classes = len(np.unique(y))
     for ind in range(len(triplets.T)):
         i,j,k = triplets.T[ind]
         [y[X==i],y[X==j],y[X==k]] 
         y_s[ind,:] = [y[X==i],y[X==j],y[X==k]]
-    pos_hist = np.zeros((5,5))
-    neg_hist = np.zeros((5,5))
-    anch_hist = np.histogram(y_s[:,0], bins=[0, 1, 2, 3,4,5])[0]
-    for i in range(5):
-        pos_hist[i,:] = np.histogram(y_s[:,1][y_s[:,0]==i], bins=[0, 1, 2, 3,4,5])[0]
-    for i in range(5):
-        neg_hist[i,:] = np.histogram(y_s[:,2][y_s[:,0]==i], bins=[0, 1, 2, 3,4,5])[0]
-    print(anch_hist,'\n',pos_hist,'\n',neg_hist)
+    pos_hist = np.zeros((n_classes,n_classes))
+    neg_hist = np.zeros((n_classes,n_classes))
+    anch_hist = np.histogram(y_s[:,0], bins=np.arange(n_classes+1))[0]
+    for i in range(n_classes):
+        pos_hist[i,:] = np.histogram(y_s[:,1][y_s[:,0]==i], bins=np.arange(n_classes+1))[0]
+    for i in range(n_classes):
+        neg_hist[i,:] = np.histogram(y_s[:,2][y_s[:,0]==i], bins=np.arange(n_classes+1))[0]
+    print('Anchor histogram:\n',anch_hist,'\n\n','Anchors-Positives histogram:\n',pos_hist,'\n\n','Anchors-Negatives histogram:\n',neg_hist)
