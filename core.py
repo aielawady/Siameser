@@ -60,13 +60,15 @@ def metric(y_true, y_pred):
     '''
     Returns the ratio of examples of the batch that satisfies `y_pred < 0`.
     '''
-    return K.sum(K.cast(K.greater(K.constant(0.0,shape=(1,)),y_pred), tf.float32))/K.cast(tf.shape(y_pred)[0], tf.float32)
+    return K.sum(K.cast(K.greater(K.constant(0.0,shape=(1,)),y_pred), K.float32))/K.cast(K.shape(y_pred)[0], K.float32)
 
-def loss(y_true,y_pred):
-    '''
-    Return the loss calculated `y_pred + alpha if y_pred + alpha > 0 and 0 otherwise` where alpha is a hyperparameter.
-    '''
-    return K.maximum(y_pred + alpha,0)
+def loss(alpha=0.2):
+    def func(y_true,y_pred):
+        '''
+        Return the loss calculated `y_pred + alpha if y_pred + alpha > 0 and 0 otherwise` where alpha is a hyperparameter.
+        '''
+        return K.maximum(y_pred + alpha,0)
+    return func 
 
 class siamese_DataGenerator(keras.utils.Sequence):
     '''
