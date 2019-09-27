@@ -60,7 +60,7 @@ def metric(y_true, y_pred):
     '''
     Returns the ratio of examples of the batch that satisfies `y_pred < 0`.
     '''
-    return K.sum(K.cast(K.greater(K.constant(0.0,shape=(1,)),y_pred), K.float32))/K.cast(K.shape(y_pred)[0], K.float32)
+    return K.sum(K.cast(K.greater(K.constant(0.0,shape=(1,)),y_pred), K.floatx()))/K.cast(K.shape(y_pred)[0], K.floatx())
 
 def loss(alpha=0.2):
     def func(y_true,y_pred):
