@@ -1,3 +1,5 @@
+import numpy as np
+
 def tripler(X,y,classnames=None,triplets_dist_anch={}, triplets_dist_pos = {}, triplets_dist_neg = {}):
     '''
     Generates a list of triplets to train the Siamese Model of the following form `[anchor, positive, negative]`. The distribution of the `anchor`, `positive` and `negative` depends on the arguments passed to the function. 
